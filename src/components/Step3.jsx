@@ -80,9 +80,9 @@ const Step3 = () => {
 
       </div>
       <h1 className="text-2xl font-bold mb-2 mt-5">Momento de Entrega</h1>
-      <RadioGroup label="Indica cuando queres recibir los productos" >
+      <RadioGroup label="Indica cuando queres recibir los productos" defaultValue='fast' >
         <div className="flex gap-5 flex-wrap md:flex-nowrap w-full">
-          <CustomRadio description="Llegara lo antes posible" value="fast" >
+          <CustomRadio description="Llegara lo antes posible" value="fast" defaultChecked>
             Ahora
           </CustomRadio>
           <CustomRadio description="Programa una fecha y hora de recepcion" value="custom_date">
