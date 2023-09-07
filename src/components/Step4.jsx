@@ -26,9 +26,9 @@ const Step4 = () => {
   return (
     <div className="mt-10">
       <h1 className="text-2xl font-bold mb-2">Forma de Pago</h1>
-      <RadioGroup onChange={handlePayMethodChange} label="Selecciona el medio de pago:" >
+      <RadioGroup onChange={handlePayMethodChange} defaultValue='cash' label="Selecciona el medio de pago:" >
         <div className="flex gap-5 flex-wrap md:flex-nowrap w-full">
-          <CustomRadio description="" value="cash" >
+          <CustomRadio description="" value="cash" defaultChecked>
             Efectivo
           </CustomRadio>
           <CustomRadio description="VISA unicamente" value="card">
