@@ -39,7 +39,7 @@ const Step2 = () => {
   return (
     <div className="mt-10">
       <h1 className="text-2xl font-bold mb-2">Direccion del Comerico</h1>
-      
+      <p>Indica por donde debe pasar el cadete a retirar tus productos:</p>
         <div className="flex w-full flex-wrap md:flex-nowrap gap-4 ">
 
           <Input type="text" name="calle" onChange={calleValidation} errorMessage={calleErrorMessage} validationState={calleErrorState} label="Calle*"></Input>

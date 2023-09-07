@@ -12,7 +12,7 @@ import Step5 from "./components/Step5";
 const App = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const isFirstStep = currentStep === 1;
-  const isLastStep = currentStep === 5;
+  const isLastStep = currentStep === 4;
 
   const CurrentForm = useMemo(() => {
     switch (currentStep) {
@@ -24,8 +24,6 @@ const App = () => {
         return <Step3 />;
       case 4:
         return <Step4 />;
-      case 5:
-        return <Step5 />;
 
       default:
         break;
@@ -54,10 +52,11 @@ const App = () => {
             {"Atrás"}
           </Button>
           <Button
-            color={isLastStep ? "danger" : "primary"}
+            isDisabled={isLastStep}
+            color="primary"
             onPress={isLastStep ? undefined : handleForward}
           >
-            {isLastStep ? "Pagar" : "Siguiente"}
+            Siguiente
           </Button>
         </ButtonGroup>
       </div>

@@ -3,29 +3,25 @@ import React from "react";
 const steps = [
   {
     id: "1",
-    title: "Registrar productos",
+    title: "Carrito de Compras",
   },
   {
     id: "2",
-    title: "Dirección del comercio",
+    title: "Dirección del Comercio",
   },
   {
     id: "3",
-    title: "Dirección de entrega",
+    title: "Entrega",
   },
   {
     id: "4",
-    title: "Detalle de pago",
-  },
-  {
-    id: "5",
     title: "Forma de pago",
   },
 ];
 
 const Stepper = ({ currentStep }) => {
   return (
-    <ol class="items-center w-full space-y-0 sm:flex sm:space-x-8 sm:space-y-0">
+    <ol class="flex flex-col gap-5 justify-center w-full space-y-0 sm:items-center sm:flex-row sm:space-x-8 sm:space-y-0">
       {steps.map((step, index) => {
         const isCurrentStep = index + 1 === currentStep;
         const liStyles = isCurrentStep ? 'text-blue-600 dark:text-blue-500' : 'text-gray-500 dark:text-gray-400';

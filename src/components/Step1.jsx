@@ -48,7 +48,7 @@ const columns = [
   },
   {
     key: "url",
-    label: "URL IMAGEN",
+    label: "IMAGENES",
   },
   {
     key: "obs",
@@ -62,7 +62,7 @@ const columns = [
 const Step1 = () => {
 
   const [productos, setProductos] = React.useState([]);
-  const [archivoSeleccionado, setArchivoSeleccionado] = React.useState(null);
+  const [archivosSeleccionados, setArchivosSeleccionados] = React.useState(null);
   // Validaciones de campos obligatorios
   const [nombreErrorState, setNombreErrorState] = React.useState('valid');
   const [cantidadErrorState, setCantidadErrorState] = React.useState('valid');
@@ -77,13 +77,28 @@ const Step1 = () => {
 
   }
 
+  const verificarTamanio = (archivos) => {
+    const archivosArray = Array.from(archivos);
+    archivosArray.forEach((archivo) => {
+      if (archivo.size > 5 * 1024 * 1024) {
+        alert('El archivo ' + archivo.name + ' es muy grande, el tamaño maximo es de 5MB');
+        setArchivosSeleccionados(null);
+        fileInputRef.current.value = null; // Restablecer el valor del input file
+        return;
+      }
+    })
+    setArchivosSeleccionados(archivos);
+
+  }
+
   const handleFileChange = (e) => {
-    const archivo = e.target.files[0];
-    setArchivoSeleccionado(archivo);
+    const archivos = e.target.files;
+    verificarTamanio(archivos);
+
   };
 
   const cancelFileUploaded = () => {
-    setArchivoSeleccionado(null);
+    setArchivosSeleccionados(null);
     fileInputRef.current.value = null; // Restablecer el valor del input file
   };
 
@@ -121,7 +136,7 @@ const Step1 = () => {
       key: productos.length + 1,
       nombre: productForm.current.nombre.value,
       cantidad: productForm.current.cantidad.value,
-      url: archivoSeleccionado?.name || 'No selecciono una imagen',
+      url: [...archivosSeleccionados].map((archivo) => archivo.name).join(', ') || 'No se selecciono ningun archivo',
       obs: productForm.current.observacion.value,
     };
     setProductos([...productos, producto]);
@@ -136,7 +151,7 @@ const Step1 = () => {
     <div className="mt-10">
       <h1 className="text-2xl font-bold mb-2">Agrega Productos al Carrito</h1>
       <form onSubmit={handleSubmit} ref={productForm}>
-
+        <p>Llena los siguientes campos para cada producto:</p>
         <div className="flex gap-4 flex-wrap md:flex-nowrap">
           <Input type="text" name="nombre" label="Nombre del producto*" errorMessage={nameErrorMessage} validationState={nombreErrorState} className="" />
           <Input type="number" name="cantidad" label="Cantidad*" errorMessage={cantidadErrorMessage} validationState={cantidadErrorState} className="" />
@@ -144,10 +159,10 @@ const Step1 = () => {
         </div>
         <div className="flex flex-col mt-5">
 
-          <p>Si deseas podes seleccionar una foto para mostrarle al cadete lo que debe buscar</p>
-          <label style={labelFileStyles} htmlFor="archivoInput">{archivoSeleccionado?.name || "Seleccionar una foto (.png, .jpeg)"}</label><br />
-          <input type="file" id="archivoInput" name="url" ref={fileInputRef} onChange={handleFileChange} style={{ display: 'none' }} accept="image/png, image/jpeg" />
-          {archivoSeleccionado && (<button onClick={cancelFileUploaded}>Cancelar Selección</button>)}
+          <p>Si deseas podes seleccionar fotos para mostrarle al cadete lo que debe buscar:</p>
+          <label style={labelFileStyles} htmlFor="archivoInput">{(archivosSeleccionados && [...archivosSeleccionados].map((archivo) => archivo.name).join(', ')) || "Selecciona una o mas fotos (.png, .jpeg)"}</label><br />
+          <input multiple type="file" id="archivoInput" name="url" ref={fileInputRef} onChange={handleFileChange} style={{ display: 'none' }} accept="image/png, image/jpeg" />
+          {archivosSeleccionados && (<button onClick={cancelFileUploaded}>Cancelar Selección</button>)}
           <Button color="success" type="submit" onClick={addProduct} className="w-full md:w-fit self-end font-semibold mt-5" style={{ color: '#fff' }}>Agregar al Carrito</Button>
         </div>
       </form>
