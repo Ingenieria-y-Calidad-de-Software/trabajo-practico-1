@@ -25,7 +25,7 @@ const steps = [
 
 const Stepper = ({ currentStep }) => {
   return (
-    <ol class="items-center w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0">
+    <ol class="items-center w-full space-y-0 sm:flex sm:space-x-8 sm:space-y-0">
       {steps.map((step, index) => {
         const isCurrentStep = index + 1 === currentStep;
         const liStyles = isCurrentStep ? 'text-blue-600 dark:text-blue-500' : 'text-gray-500 dark:text-gray-400';

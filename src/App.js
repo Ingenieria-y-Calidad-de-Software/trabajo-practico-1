@@ -49,7 +49,7 @@ const App = () => {
       <div class="container mx-auto p-10">
         <Stepper currentStep={currentStep} />
         {CurrentForm}
-        <ButtonGroup>
+        <ButtonGroup className="mt-5">
           <Button color="default" onPress={handleBack} isDisabled={isFirstStep}>
             {"Atrás"}
           </Button>
