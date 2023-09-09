@@ -24,7 +24,7 @@ const Step4 = () => {
     console.log('compra finalizada');
   }
   return (
-    <div className="mt-10">
+    <div className="mt-12">
       <h1 className="text-2xl font-bold mb-2">Forma de Pago</h1>
       <RadioGroup onChange={handlePayMethodChange} defaultValue='cash' label="Selecciona el medio de pago:" >
         <div className="flex gap-5 flex-wrap md:flex-nowrap w-full">
