@@ -36,13 +36,16 @@ function FileLoaderInput(props) {
   };
 
   const eliminarImagen = (index) => {
-    const nuevasImagenes = [...imagenesSeleccionadas];
-    nuevasImagenes.splice(index, 1);
-    setImagenesSeleccionadas(nuevasImagenes);
-
     const nuevosArchivos = [...archivosSeleccionados];
     nuevosArchivos.splice(index, 1);
     setArchivosSeleccionados(nuevosArchivos);
+  
+    const nuevasImagenes = [...imagenesSeleccionadas];
+    nuevasImagenes.splice(index, 1);
+    setImagenesSeleccionadas(nuevasImagenes);
+  
+    // Llama a props.onFilesSelected con los archivos actualizados
+    props.onFilesSelected(nuevosArchivos);
   };
 
   return (
@@ -69,5 +72,4 @@ function FileLoaderInput(props) {
     </div>
   );
 }
-
 export default FileLoaderInput;

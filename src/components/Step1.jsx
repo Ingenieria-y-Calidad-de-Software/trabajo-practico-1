@@ -16,7 +16,7 @@ const columns = [
 
 const Step1 = (props) => {
   const [productos, setProductos] = useState([]);
-  const [archivosSeleccionados, setArchivosSeleccionados] = useState(null);
+  const [archivosSeleccionados, setArchivosSeleccionados] = useState(null); // Estado para rastrear las imágenes seleccionadas
   const [descripcionErrorState, setDescripcionErrorState] = useState('valid');
   const [descripcionErrorMessage, setDescripcionErrorMessage] = useState('');
 
@@ -24,11 +24,11 @@ const Step1 = (props) => {
 
   function addProduct() {
     if (!validForm()) return;
-  
+
     const url = archivosSeleccionados ? [...archivosSeleccionados].map((archivo) => (
       <img src={URL.createObjectURL(archivo)} alt={archivo.name} style={{ maxWidth: '100px', maxHeight: '100px' }} />
     )) : 'No se seleccionó ninguna imagen';
-  
+
     const producto = {
       key: productos.length + 1,
       descripcion: productForm.current.descripcion.value,
@@ -38,8 +38,10 @@ const Step1 = (props) => {
     productForm.current.reset();
 
     props.onAgregarAlCarrito();
+
+    // Limpiar archivos seleccionados después de agregarlos
+    setArchivosSeleccionados(null);
   }
-  
 
   function validForm() {
     if (!productForm.current.descripcion.value) {
