@@ -1,6 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Button } from "@nextui-org/react";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from "@nextui-org/react";
+import {
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+  getKeyValue,
+} from "@nextui-org/react";
 import FileLoaderInput from "./FileLoaderInput";
 
 const columns = [
@@ -16,57 +24,78 @@ const columns = [
 
 const Step1 = (props) => {
   const [productos, setProductos] = useState([]);
-  const [archivosSeleccionados, setArchivosSeleccionados] = useState(null); // Estado para rastrear las imágenes seleccionadas
-  const [descripcionErrorState, setDescripcionErrorState] = useState('valid');
-  const [descripcionErrorMessage, setDescripcionErrorMessage] = useState('');
+  const [archivosSeleccionados, setArchivosSeleccionados] = useState([]);
+  const [descripcionErrorState, setDescripcionErrorState] = useState("valid");
+  const [descripcionErrorMessage, setDescripcionErrorMessage] = useState("");
 
-  const productForm = React.useRef(null);
+  const productForm = useRef(null);
 
-  function addProduct() {
-    if (!validForm()) return;
+  // Función para limpiar el estado de error de descripción
+  const limpiarErrorDescripcion = () => {
+    setDescripcionErrorState("valid");
+    setDescripcionErrorMessage("");
+  };
 
-    const url = archivosSeleccionados ? [...archivosSeleccionados].map((archivo) => (
-      <img src={URL.createObjectURL(archivo)} alt={archivo.name} style={{ maxWidth: '100px', maxHeight: '100px' }} />
-    )) : 'No se seleccionó ninguna imagen';
-
+  // Función para agregar un producto
+  const agregarProducto = () => {
+    if (!productForm.current.descripcion.value) {
+      setDescripcionErrorState("invalid");
+      setDescripcionErrorMessage("Ingresa una descripción válida");
+      return;
+    }
+  
+    // Asegúrate de que archivosSeleccionados sea un array
+    const archivosSeleccionadosArray = Array.from(archivosSeleccionados);
+  
+    const url =
+      archivosSeleccionadosArray.length > 0
+        ? archivosSeleccionadosArray.map((archivo) => (
+            <img
+              key={archivo.name}
+              src={URL.createObjectURL(archivo)}
+              alt={archivo.name}
+              style={{ maxWidth: "100px", maxHeight: "100px" }}
+            />
+          ))
+        : 'No se seleccionó ninguna imagen';
+  
     const producto = {
       key: productos.length + 1,
       descripcion: productForm.current.descripcion.value,
       url: url,
     };
+  
     setProductos([...productos, producto]);
     productForm.current.reset();
-
+    limpiarErrorDescripcion();
     props.onAgregarAlCarrito();
+    setArchivosSeleccionados([]);
+  };
 
-    // Limpiar archivos seleccionados después de agregarlos
-    setArchivosSeleccionados(null);
-  }
-
-  function validForm() {
-    if (!productForm.current.descripcion.value) {
-      setDescripcionErrorState('invalid');
-      setDescripcionErrorMessage('Ingresa una descripción válida');
-      return false;
-    } else {
-      setDescripcionErrorState('valid');
-      setDescripcionErrorMessage('');
-      return true;
-    }
-  }
-
+  // Manejar el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!validForm()) return;
+    if (!productForm.current.descripcion.value) {
+      setDescripcionErrorState("invalid");
+      setDescripcionErrorMessage("Ingresa una descripción válida");
+      return;
+    }
+
+    const archivosSeleccionadosArray = Array.from(archivosSeleccionados);
 
     const producto = {
       key: productos.length + 1,
       descripcion: productForm.current.descripcion.value,
-      url: [...archivosSeleccionados].map((archivo) => archivo.name).join(', ') || 'No se seleccionó ningún archivo',
+      url:
+        archivosSeleccionadosArray.length > 0
+          ? archivosSeleccionadosArray.map((archivo) => archivo.name).join(", ")
+          : "No se seleccionó ningún archivo",
     };
+    
+
     setProductos([...productos, producto]);
     productForm.current.reset();
-
+    limpiarErrorDescripcion();
     props.onAgregarAlCarrito();
   };
 
@@ -80,7 +109,7 @@ const Step1 = (props) => {
             name="descripcion"
             placeholder="Descripción de los productos*"
             rows="4"
-            style={{ width: '100%' }}
+            style={{ width: "100%" }}
             className={`border border-gray-300 p-2 rounded-md ${descripcionErrorState}`}
           ></textarea>
           {descripcionErrorMessage && (
@@ -89,13 +118,13 @@ const Step1 = (props) => {
         </div>
         <div className="flex flex-col mt-5">
           <p>Si deseas, puedes seleccionar fotos para mostrarle al cadete lo que debe buscar:</p>
-          <FileLoaderInput onFilesSelected={(archivos) => setArchivosSeleccionados(archivos)} />
+          <FileLoaderInput onFilesSelected={setArchivosSeleccionados} />
           <Button
             color="success"
             type="button"
-            onClick={addProduct}
+            onClick={agregarProducto}
             className="w-full md:w-fit self-end font-semibold mt-5"
-            style={{ color: '#fff' }}
+            style={{ color: "#fff" }}
           >
             Agregar al Carrito
           </Button>
@@ -103,7 +132,7 @@ const Step1 = (props) => {
       </form>
 
       <h1 className="text-2xl font-bold mb-2">Tu Pedido</h1>
-      <Table aria-label="Example table with dynamic content">
+      <Table aria-label="Ejemplo de tabla con contenido dinámico">
         <TableHeader columns={columns}>
           {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
         </TableHeader>

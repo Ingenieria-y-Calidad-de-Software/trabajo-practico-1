@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import './FileLoaderInput.css';
 
 function FileLoaderInput(props) {
-  const fileInputRef = React.useRef(null);
+  const fileInputRef = useRef(null);
 
   const [archivosSeleccionados, setArchivosSeleccionados] = useState([]);
   const [imagenesSeleccionadas, setImagenesSeleccionadas] = useState([]);
@@ -14,9 +14,7 @@ function FileLoaderInput(props) {
     archivosArray.forEach((archivo) => {
       if (archivo.size > 5 * 1024 * 1024) {
         alert('El archivo ' + archivo.name + ' es muy grande, el tamaño máximo es de 5MB');
-        setArchivosSeleccionados([]);
-        setImagenesSeleccionadas([]);
-        fileInputRef.current.value = null;
+        limpiarSeleccion();
         return;
       }
 
@@ -37,15 +35,22 @@ function FileLoaderInput(props) {
 
   const eliminarImagen = (index) => {
     const nuevosArchivos = [...archivosSeleccionados];
-    nuevosArchivos.splice(index, 1);
-    setArchivosSeleccionados(nuevosArchivos);
-  
     const nuevasImagenes = [...imagenesSeleccionadas];
+
+    nuevosArchivos.splice(index, 1);
     nuevasImagenes.splice(index, 1);
+
+    setArchivosSeleccionados(nuevosArchivos);
     setImagenesSeleccionadas(nuevasImagenes);
-  
+
     // Llama a props.onFilesSelected con los archivos actualizados
     props.onFilesSelected(nuevosArchivos);
+  };
+
+  const limpiarSeleccion = () => {
+    setArchivosSeleccionados([]);
+    setImagenesSeleccionadas([]);
+    fileInputRef.current.value = null;
   };
 
   return (
@@ -72,4 +77,5 @@ function FileLoaderInput(props) {
     </div>
   );
 }
+
 export default FileLoaderInput;
