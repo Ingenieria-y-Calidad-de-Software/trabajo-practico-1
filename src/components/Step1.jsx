@@ -14,7 +14,7 @@ const columns = [
   },
 ];
 
-const Step1 = () => {
+const Step1 = (props) => {
   const [productos, setProductos] = useState([]);
   const [archivosSeleccionados, setArchivosSeleccionados] = useState(null);
   const [descripcionErrorState, setDescripcionErrorState] = useState('valid');
@@ -36,6 +36,8 @@ const Step1 = () => {
     };
     setProductos([...productos, producto]);
     productForm.current.reset();
+
+    props.onAgregarAlCarrito();
   }
   
 
@@ -62,13 +64,15 @@ const Step1 = () => {
     };
     setProductos([...productos, producto]);
     productForm.current.reset();
+
+    props.onAgregarAlCarrito();
   };
 
   return (
     <div className="mt-10">
-      <h1 className="text-2xl font-bold mb-2">Agrega Productos al Carrito</h1>
+      <h1 className="text-2xl font-bold mb-2">Agregar qué debe buscar el cadete</h1>
       <form onSubmit={handleSubmit} ref={productForm}>
-        <p>Llena el campo descripción para los productos a pedir:</p>
+        <p>Llena el campo descripción indicando los productos a buscar:</p>
         <div className="flex gap-4 flex-wrap md:flex-nowrap">
           <textarea
             name="descripcion"
@@ -96,7 +100,7 @@ const Step1 = () => {
         </div>
       </form>
 
-      <h2 className="text-lg font-bold mb-2">Tu Pedido</h2>
+      <h1 className="text-2xl font-bold mb-2">Tu Pedido</h1>
       <Table aria-label="Example table with dynamic content">
         <TableHeader columns={columns}>
           {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}

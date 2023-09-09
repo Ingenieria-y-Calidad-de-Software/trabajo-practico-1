@@ -17,7 +17,7 @@ const App = () => {
   const CurrentForm = useMemo(() => {
     switch (currentStep) {
       case 1:
-        return <Step1 />;
+        return <Step1 onAgregarAlCarrito={() => setProductosAgregados(true)} />;
       case 2:
         return <Step2 />;
       case 3:
@@ -42,6 +42,8 @@ const App = () => {
     });
   }, []);
 
+  const [productosAgregados, setProductosAgregados] = useState(false);
+
   return (
     <NextUIProvider>
       <div class="container mx-auto p-10">
@@ -52,7 +54,7 @@ const App = () => {
             {"Atrás"}
           </Button>
           <Button
-            isDisabled={isLastStep}
+            isDisabled={isLastStep || !productosAgregados} // Deshabilitar si es el último paso o no se han agregado productos al carrito
             color="primary"
             onPress={isLastStep ? undefined : handleForward}
           >

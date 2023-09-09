@@ -16,7 +16,7 @@ function FileLoaderInput(props) {
         alert('El archivo ' + archivo.name + ' es muy grande, el tamaño máximo es de 5MB');
         setArchivosSeleccionados([]);
         setImagenesSeleccionadas([]);
-        fileInputRef.current.value = null; // Restablecer el valor del input file
+        fileInputRef.current.value = null;
         return;
       }
 
@@ -27,7 +27,7 @@ function FileLoaderInput(props) {
 
     setArchivosSeleccionados(archivos);
     setImagenesSeleccionadas(imagenes);
-    props.onFilesSelected(archivos); // Pasar archivos seleccionados al componente padre
+    props.onFilesSelected(archivos);
   };
 
   const handleFileChange = (e) => {
