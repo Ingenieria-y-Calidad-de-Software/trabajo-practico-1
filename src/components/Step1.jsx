@@ -1,119 +1,92 @@
-import React from "react";
-import { Input, Button } from "@nextui-org/react";
+import React, { useState } from "react";
+import { Button } from "@nextui-org/react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from "@nextui-org/react";
 import FileLoaderInput from "./FileLoaderInput";
 
 const columns = [
   {
-    key: "nombre",
-    label: "NOMBRE",
-  },
-  {
-    key: "cantidad",
-    label: "CANTIDAD",
+    key: "descripcion",
+    label: "DESCRIPCIÓN",
   },
   {
     key: "url",
     label: "IMAGENES",
   },
-  {
-    key: "obs",
-    label: "OBSERVACION",
-  },
-  {
-    key: "actions",
-    label: "ACCIONES",
-  }
 ];
+
 const Step1 = () => {
+  const [productos, setProductos] = useState([]);
+  const [archivosSeleccionados, setArchivosSeleccionados] = useState(null);
+  const [descripcionErrorState, setDescripcionErrorState] = useState('valid');
+  const [descripcionErrorMessage, setDescripcionErrorMessage] = useState('');
 
-  const [productos, setProductos] = React.useState([]);
-  const [archivosSeleccionados, setArchivosSeleccionados] = React.useState(null);
-  // Validaciones de campos obligatorios
-  const [nombreErrorState, setNombreErrorState] = React.useState('valid');
-  const [cantidadErrorState, setCantidadErrorState] = React.useState('valid');
-  const [nameErrorMessage, setNameErrorMessage] = React.useState('');
-  const [cantidadErrorMessage, setCantidadErrorMessage] = React.useState('');
-
-  const fileInputRef = React.useRef(null);
   const productForm = React.useRef(null);
 
   function addProduct() {
-
-
+    // ...
   }
 
-
-
   function validForm() {
-    if (!productForm.current.nombre.value) {
-      setNombreErrorState('invalid');
-      setNameErrorMessage('Ingresa un nombre valido');
-    }
-    else {
-      setNombreErrorState('valid');
-      setNameErrorMessage('');
-    }
-
-    if (productForm.current.cantidad.value <= 0 || isNaN(+productForm.current.cantidad.value)) {
-      setCantidadErrorState('invalid');
-      setCantidadErrorMessage('Ingresa una cantidad valida');
-
-    } else {
-      setCantidadErrorState('valid');
-      setCantidadErrorMessage('');
-    }
-
-    if (!productForm.current.nombre.value || productForm.current.cantidad.value <= 0 || isNaN(+productForm.current.cantidad.value)) {
+    if (!productForm.current.descripcion.value) {
+      setDescripcionErrorState('invalid');
+      setDescripcionErrorMessage('Ingresa una descripción válida');
       return false;
+    } else {
+      setDescripcionErrorState('valid');
+      setDescripcionErrorMessage('');
+      return true;
     }
-    return true;
-
   }
 
   const handleSubmit = (e) => {
-
     e.preventDefault();
     if (!validForm()) return;
 
     const producto = {
       key: productos.length + 1,
-      nombre: productForm.current.nombre.value,
-      cantidad: productForm.current.cantidad.value,
-      url: [...archivosSeleccionados].map((archivo) => archivo.name).join(', ') || 'No se selecciono ningun archivo',
-      obs: productForm.current.observacion.value,
+      descripcion: productForm.current.descripcion.value,
+      url: [...archivosSeleccionados].map((archivo) => archivo.name).join(', ') || 'No se seleccionó ningún archivo',
     };
     setProductos([...productos, producto]);
     productForm.current.reset();
-
-
-  }
-
+  };
 
   return (
     <div className="mt-10">
       <h1 className="text-2xl font-bold mb-2">Agrega Productos al Carrito</h1>
-      
       <form onSubmit={handleSubmit} ref={productForm}>
-        <p>Llena los siguientes campos para cada producto:</p>
+        <p>Llena el campo descripción para los productos a pedir:</p>
         <div className="flex gap-4 flex-wrap md:flex-nowrap">
-          <Input type="text" name="nombre" label="Nombre del producto*" errorMessage={nameErrorMessage} validationState={nombreErrorState} className="" />
-          <Input type="number" name="cantidad" label="Cantidad*" errorMessage={cantidadErrorMessage} validationState={cantidadErrorState} className="" />
-          <Input type="text" name="observacion" label="Observacion" className="" />
+        <textarea
+          name="descripcion"
+          placeholder="Descripción de los productos*"
+          rows="4"
+          style={{ width: '100%' }} // Establece el ancho al 100%
+          className={`border border-gray-300 p-2 rounded-md ${descripcionErrorState}`}
+        ></textarea>
+
+          {/* Mostrar mensaje de error si es necesario */}
+          {descripcionErrorMessage && (
+            <div className="text-red-500">{descripcionErrorMessage}</div>
+          )}
         </div>
         <div className="flex flex-col mt-5">
-
-          <p>Si deseas podes seleccionar fotos para mostrarle al cadete lo que debe buscar:</p>
+          <p>Si deseas, puedes seleccionar fotos para mostrarle al cadete lo que debe buscar:</p>
           <FileLoaderInput></FileLoaderInput>
-          
-          <Button color="success" type="submit" onClick={addProduct} className="w-full md:w-fit self-end font-semibold mt-5" style={{ color: '#fff' }}>Agregar al Carrito</Button>
-         
+          <Button
+            color="success"
+            type="submit"
+            onClick={addProduct}
+            className="w-full md:w-fit self-end font-semibold mt-5"
+            style={{ color: '#fff' }}
+          >
+            Agregar al Carrito
+          </Button>
         </div>
       </form>
 
       {/* CARRITO */}
-
-      <h2 className="text-lg font-bold mb-2">Tu Carrito</h2>
+      <h2 className="text-lg font-bold mb-2">Tu Pedido</h2>
       <Table aria-label="Example table with dynamic content">
         <TableHeader columns={columns}>
           {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
@@ -122,10 +95,8 @@ const Step1 = () => {
           {(item) => (
             <TableRow key={item.key}>
               {(columnKey) => <TableCell>{getKeyValue(item, columnKey)} </TableCell>}
-
             </TableRow>
           )}
-
         </TableBody>
       </Table>
     </div>
