@@ -10,7 +10,7 @@ const columns = [
   },
   {
     key: "url",
-    label: "IMAGENES",
+    label: "IMÁGENES",
   },
 ];
 
@@ -23,8 +23,21 @@ const Step1 = () => {
   const productForm = React.useRef(null);
 
   function addProduct() {
-    // ...
+    if (!validForm()) return;
+  
+    const url = archivosSeleccionados ? [...archivosSeleccionados].map((archivo) => (
+      <img src={URL.createObjectURL(archivo)} alt={archivo.name} style={{ maxWidth: '100px', maxHeight: '100px' }} />
+    )) : 'No se seleccionó ninguna imagen';
+  
+    const producto = {
+      key: productos.length + 1,
+      descripcion: productForm.current.descripcion.value,
+      url: url,
+    };
+    setProductos([...productos, producto]);
+    productForm.current.reset();
   }
+  
 
   function validForm() {
     if (!productForm.current.descripcion.value) {
@@ -57,25 +70,23 @@ const Step1 = () => {
       <form onSubmit={handleSubmit} ref={productForm}>
         <p>Llena el campo descripción para los productos a pedir:</p>
         <div className="flex gap-4 flex-wrap md:flex-nowrap">
-        <textarea
-          name="descripcion"
-          placeholder="Descripción de los productos*"
-          rows="4"
-          style={{ width: '100%' }} // Establece el ancho al 100%
-          className={`border border-gray-300 p-2 rounded-md ${descripcionErrorState}`}
-        ></textarea>
-
-          {/* Mostrar mensaje de error si es necesario */}
+          <textarea
+            name="descripcion"
+            placeholder="Descripción de los productos*"
+            rows="4"
+            style={{ width: '100%' }}
+            className={`border border-gray-300 p-2 rounded-md ${descripcionErrorState}`}
+          ></textarea>
           {descripcionErrorMessage && (
             <div className="text-red-500">{descripcionErrorMessage}</div>
           )}
         </div>
         <div className="flex flex-col mt-5">
           <p>Si deseas, puedes seleccionar fotos para mostrarle al cadete lo que debe buscar:</p>
-          <FileLoaderInput></FileLoaderInput>
+          <FileLoaderInput onFilesSelected={(archivos) => setArchivosSeleccionados(archivos)} />
           <Button
             color="success"
-            type="submit"
+            type="button"
             onClick={addProduct}
             className="w-full md:w-fit self-end font-semibold mt-5"
             style={{ color: '#fff' }}
@@ -85,7 +96,6 @@ const Step1 = () => {
         </div>
       </form>
 
-      {/* CARRITO */}
       <h2 className="text-lg font-bold mb-2">Tu Pedido</h2>
       <Table aria-label="Example table with dynamic content">
         <TableHeader columns={columns}>
@@ -94,7 +104,7 @@ const Step1 = () => {
         <TableBody items={productos}>
           {(item) => (
             <TableRow key={item.key}>
-              {(columnKey) => <TableCell>{getKeyValue(item, columnKey)} </TableCell>}
+              {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
             </TableRow>
           )}
         </TableBody>
