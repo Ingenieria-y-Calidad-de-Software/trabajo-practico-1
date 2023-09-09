@@ -1,41 +1,7 @@
 import React from "react";
 import { Input, Button } from "@nextui-org/react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from "@nextui-org/react";
-
-const labelFileStyles = {
-  backgroundColor: '#007bff',
-  color: '#fff',
-  padding: '10px 20px',
-  cursor: 'pointer',
-  marginTop: '10px',
-  borderRadius: '10px',
-};
-const rows = [
-  {
-    key: "1",
-    name: "Tony Reichert",
-    role: "CEO",
-    status: "Active",
-  },
-  {
-    key: "2",
-    name: "Zoey Lang",
-    role: "Technical Lead",
-    status: "Paused",
-  },
-  {
-    key: "3",
-    name: "Jane Fisher",
-    role: "Senior Developer",
-    status: "Active",
-  },
-  {
-    key: "4",
-    name: "William Howard",
-    role: "Community Manager",
-    status: "Vacation",
-  },
-];
+import FileLoaderInput from "./FileLoaderInput";
 
 const columns = [
   {
@@ -77,30 +43,7 @@ const Step1 = () => {
 
   }
 
-  const verificarTamanio = (archivos) => {
-    const archivosArray = Array.from(archivos);
-    archivosArray.forEach((archivo) => {
-      if (archivo.size > 5 * 1024 * 1024) {
-        alert('El archivo ' + archivo.name + ' es muy grande, el tamaño maximo es de 5MB');
-        setArchivosSeleccionados(null);
-        fileInputRef.current.value = null; // Restablecer el valor del input file
-        return;
-      }
-    })
-    setArchivosSeleccionados(archivos);
 
-  }
-
-  const handleFileChange = (e) => {
-    const archivos = e.target.files;
-    verificarTamanio(archivos);
-
-  };
-
-  const cancelFileUploaded = () => {
-    setArchivosSeleccionados(null);
-    fileInputRef.current.value = null; // Restablecer el valor del input file
-  };
 
   function validForm() {
     if (!productForm.current.nombre.value) {
@@ -129,6 +72,7 @@ const Step1 = () => {
   }
 
   const handleSubmit = (e) => {
+
     e.preventDefault();
     if (!validForm()) return;
 
@@ -141,7 +85,6 @@ const Step1 = () => {
     };
     setProductos([...productos, producto]);
     productForm.current.reset();
-    cancelFileUploaded();
 
 
   }
@@ -150,6 +93,7 @@ const Step1 = () => {
   return (
     <div className="mt-10">
       <h1 className="text-2xl font-bold mb-2">Agrega Productos al Carrito</h1>
+      
       <form onSubmit={handleSubmit} ref={productForm}>
         <p>Llena los siguientes campos para cada producto:</p>
         <div className="flex gap-4 flex-wrap md:flex-nowrap">
@@ -160,10 +104,10 @@ const Step1 = () => {
         <div className="flex flex-col mt-5">
 
           <p>Si deseas podes seleccionar fotos para mostrarle al cadete lo que debe buscar:</p>
-          <label style={labelFileStyles} htmlFor="archivoInput">{(archivosSeleccionados && [...archivosSeleccionados].map((archivo) => archivo.name).join(', ')) || "Selecciona una o mas fotos (.png, .jpeg)"}</label><br />
-          <input multiple type="file" id="archivoInput" name="url" ref={fileInputRef} onChange={handleFileChange} style={{ display: 'none' }} accept="image/png, image/jpeg" />
-          {archivosSeleccionados && (<button onClick={cancelFileUploaded}>Cancelar Selección</button>)}
+          <FileLoaderInput></FileLoaderInput>
+          
           <Button color="success" type="submit" onClick={addProduct} className="w-full md:w-fit self-end font-semibold mt-5" style={{ color: '#fff' }}>Agregar al Carrito</Button>
+         
         </div>
       </form>
 
