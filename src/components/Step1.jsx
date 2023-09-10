@@ -7,7 +7,6 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  getKeyValue,
 } from "@nextui-org/react";
 import FileLoaderInput from "./FileLoaderInput";
 
@@ -44,25 +43,17 @@ const Step1 = (props) => {
       return;
     }
   
-    // Asegúrate de que archivosSeleccionados sea un array
     const archivosSeleccionadosArray = Array.from(archivosSeleccionados);
   
-    const url =
+    const urls =
       archivosSeleccionadosArray.length > 0
-        ? archivosSeleccionadosArray.map((archivo) => (
-            <img
-              key={archivo.name}
-              src={URL.createObjectURL(archivo)}
-              alt={archivo.name}
-              style={{ maxWidth: "100px", maxHeight: "100px" }}
-            />
-          ))
-        : 'No se seleccionó ninguna imagen';
+        ? archivosSeleccionadosArray.map((archivo) => URL.createObjectURL(archivo))
+        : [];
   
     const producto = {
       key: productos.length + 1,
       descripcion: productForm.current.descripcion.value,
-      url: url,
+      urls: urls,
     };
   
     setProductos([...productos, producto]);
@@ -91,7 +82,6 @@ const Step1 = (props) => {
           ? archivosSeleccionadosArray.map((archivo) => archivo.name).join(", ")
           : "No se seleccionó ningún archivo",
     };
-    
 
     setProductos([...productos, producto]);
     productForm.current.reset();
@@ -139,7 +129,17 @@ const Step1 = (props) => {
         <TableBody items={productos}>
           {(item) => (
             <TableRow key={item.key}>
-              {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
+              <TableCell>{item.descripcion}</TableCell>
+              <TableCell>
+                {item.urls.map((url, index) => (
+                  <img
+                    key={index}
+                    src={url}
+                    alt={`Imagen ${index + 1}`}
+                    style={{ maxWidth: "100px", maxHeight: "100px" }}
+                  />
+                ))}
+              </TableCell>
             </TableRow>
           )}
         </TableBody>

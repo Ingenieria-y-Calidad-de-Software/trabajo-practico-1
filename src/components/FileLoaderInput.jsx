@@ -9,7 +9,7 @@ function FileLoaderInput(props) {
 
   const verificarTamanio = (archivos) => {
     const archivosArray = Array.from(archivos);
-    const imagenes = [];
+    const nuevasImagenes = [...imagenesSeleccionadas]; // Copia las imágenes existentes
 
     archivosArray.forEach((archivo) => {
       if (archivo.size > 5 * 1024 * 1024) {
@@ -20,11 +20,11 @@ function FileLoaderInput(props) {
 
       // Crear una URL para cada archivo de imagen
       const imagen = URL.createObjectURL(archivo);
-      imagenes.push(imagen);
+      nuevasImagenes.push(imagen);
     });
 
     setArchivosSeleccionados(archivos);
-    setImagenesSeleccionadas(imagenes);
+    setImagenesSeleccionadas(nuevasImagenes);
     props.onFilesSelected(archivos);
   };
 
