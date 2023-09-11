@@ -24,6 +24,7 @@ const columns = [
 ];
 
 const Step4 = () => {
+ 
   const [payMethod, setPayMethod] = React.useState("cash");
   const [cardNumber, setCardNumber] = React.useState("");
   const [cardName, setCardName] = React.useState("");
@@ -50,10 +51,10 @@ const Step4 = () => {
           button: "Aceptar"
         });
         return
-      } else if (number.length < 16) {
+      } else if (number.length !== 16 || number.charAt(0) !== "4") {
         swal({
           title: "Error!",
-          text: "Falló el registro de pago. Número de tarjeta inválido.",
+          text: "Falló el registro de pago. Número de tarjeta inválido. Sólo se acepta VISA.",
           icon: "error",
           button: "Aceptar"
         });
@@ -89,7 +90,7 @@ const Step4 = () => {
         return
       }
     }
-    
+
     swal({
       title: "Pedido finalizado!",
       text: "Muchas gracias por tu compra",
@@ -110,7 +111,7 @@ const Step4 = () => {
           </TableHeader>
           <TableBody>
             <TableRow key="1">
-              <TableCell>Un ferne con coca barato</TableCell>
+              <TableCell>Envío: Producto de "Lo que sea"</TableCell>
               <TableCell>$20</TableCell>
             </TableRow>
           </TableBody>
@@ -143,13 +144,16 @@ const Step4 = () => {
               label="Nombre del Titular"
               className="mb-4"
             ></Input>
-            <small>Ingresa el número sin espacios</small>
             <Input
               type="number"
               onChange={(e) => setCardNumber(e.target.value)}
               label="Número de Tarjeta"
               className="mb-4"
             ></Input>
+            {(validateMastercard) => {
+              <small>Mastercard</small>
+            }
+            }
             <div className="flex gap-4">
               <Input
                 onChange={(e) => setExpiration(e.target.value)}
