@@ -7,76 +7,43 @@ const Step1 = (props) => {
   const [archivosSeleccionados, setArchivosSeleccionados] = useState([]);
   const [descripcionErrorState, setDescripcionErrorState] = useState("valid");
   const [descripcionErrorMessage, setDescripcionErrorMessage] = useState("");
-  const [pedidoAgregado, setPedidoAgregado] = useState(false); // Estado para rastrear si se agregó el producto al carrito
-
+  const [pedidoAgregado, setPedidoAgregado] = useState(false);
   const productForm = useRef(null);
 
-  // Función para limpiar el estado de error de descripción
   const limpiarErrorDescripcion = () => {
     setDescripcionErrorState("valid");
     setDescripcionErrorMessage("");
   };
 
-  // Función para agregar un producto
-  const agregarProducto = () => {
-    if (!productForm.current.descripcion.value) {
-      setDescripcionErrorState("invalid");
-      setDescripcionErrorMessage("Ingresa una descripción válida");
-      return;
-    }
-
-    const archivosSeleccionadosArray = Array.from(archivosSeleccionados);
-
-    const urls =
-      archivosSeleccionadosArray.length > 0
-        ? archivosSeleccionadosArray.map((archivo) => URL.createObjectURL(archivo))
-        : [];
-
-    const producto = {
-      key: productos.length + 1,
-      descripcion: productForm.current.descripcion.value,
-      urls: urls,
-    };
-
-    setProductos([...productos, producto]);
-    productForm.current.reset();
-    limpiarErrorDescripcion();
-    props.onAgregarAlCarrito();
-    setArchivosSeleccionados([]);
-    setPedidoAgregado(true); // Marcar el producto como agregado al carrito
-  };
-
-  // Manejar el envío del formulario
-  const handleSubmit = (e) => {
+  
+  const agregarProducto = (e) => {
     e.preventDefault();
     if (!productForm.current.descripcion.value) {
       setDescripcionErrorState("invalid");
       setDescripcionErrorMessage("Ingresa una descripción válida");
       return;
     }
-
+  
     const archivosSeleccionadosArray = Array.from(archivosSeleccionados);
-
+  
     const producto = {
       key: productos.length + 1,
       descripcion: productForm.current.descripcion.value,
-      url:
-        archivosSeleccionadosArray.length > 0
-          ? archivosSeleccionadosArray.map((archivo) => archivo.name).join(", ")
-          : "No se seleccionó ningún archivo",
+      urls: archivosSeleccionadosArray.map((archivo) => URL.createObjectURL(archivo)), // Obtener las urls de los archivos
     };
-
+  
     setProductos([...productos, producto]);
     productForm.current.reset();
     limpiarErrorDescripcion();
     props.onAgregarAlCarrito();
-    setPedidoAgregado(true); // Marcar el producto como agregado al carrito
+    setPedidoAgregado(true);
+    setArchivosSeleccionados([]); // Limpiar los archivos seleccionados después de agregarlos
   };
-
+  
   return (
     <div className="mt-10">
       <h1 className="text-2xl font-bold mb-2">Agregar qué debe buscar el cadete</h1>
-      <form onSubmit={handleSubmit} ref={productForm}>
+      <form onSubmit={agregarProducto} ref={productForm}>
         <p>Llena el campo descripción indicando los productos a buscar:</p>
         <div className="flex gap-4 flex-wrap md:flex-nowrap">
           <textarea
