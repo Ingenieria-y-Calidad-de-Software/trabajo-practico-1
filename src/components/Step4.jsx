@@ -149,30 +149,26 @@ const Step4 = () => {
             <Input
               onChange={(e) => setCardName(e.target.value)}
               type="text"
-              label="Nombre del Titular"
+              label="Nombre del Titular*"
               className="mb-4"
             ></Input>
             <Input
               type="number"
               onChange={(e) => setCardNumber(e.target.value)}
-              label="Número de Tarjeta"
+              label="Número de Tarjeta*"
               className="mb-4"
             ></Input>
-            {(validateMastercard) => {
-              <small>Mastercard</small>
-            }
-            }
             <div className="flex gap-4">
               <Input
                 onChange={(e) => setExpiration(e.target.value)}
                 type="text"
-                label="Fecha de Vencimiento"
+                label="Fecha de Vencimiento*"
                 className="mb-4"
               ></Input>
               <Input 
                 onChange={(e) => setCodeNumber(e.target.value)}
                 type="number" 
-                label="CVC/CVV" 
+                label="CVC/CVV*" 
                 className="mb-4">
               </Input>
             </div>
@@ -185,7 +181,7 @@ const Step4 = () => {
             <Input 
               onChange={(e) => setCash(e.target.value)}
               type="number" 
-              label="Monto">  
+              label="Monto*">  
             </Input>
           </form>
         )}
