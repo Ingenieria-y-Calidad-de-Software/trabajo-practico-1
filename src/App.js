@@ -10,9 +10,11 @@ import Step4 from "./components/Step4";
 import Step5 from "./components/Step5";
 
 const App = () => {
+  
   const [currentStep, setCurrentStep] = useState(1);
-  const [st2, setCurrentSt2] = useState(false);
   const isFirstStep = currentStep === 1;
+  const [isValidStep1, setIsValidStep1] = useState(false)
+  const [st2, setCurrentSt2] = useState(false);
   const [isValidStep3, setIsValidStep3] = useState(false);
 
 
@@ -22,7 +24,6 @@ const App = () => {
   const CurrentForm = useMemo(() => {
     switch (currentStep) {
       case 1:
-        setCurrentSt2(false)
         return <Step1 />;
       case 2:
         return < Step2 validar = {(camp) =>  setCurrentSt2(camp)} />;
@@ -38,15 +39,30 @@ const App = () => {
   }, [currentStep]);
 
   useEffect(() => {
-    if (currentStep !== 3 && !isValidStep3) {
-      setIsValidStep3(true)
-      
+    if (currentStep !== 1 && !isValidStep1) {
+      setIsValidStep1(true)
     }
-    
-    
+    return () => {
+    }
+  }, [currentStep, isValidStep1])
+
+  useEffect(() => {
+    if (currentStep !== 2 && !st2) {
+      setCurrentSt2(true) 
+    }
+    return () => {
+    }
+  }, [currentStep, st2])
+
+
+  useEffect(() => {
+    if (currentStep !== 3 && !isValidStep3) {
+      setIsValidStep3(true) 
+    }
     return () => {
     }
   }, [currentStep, isValidStep3])
+
   
 
   const handleBack = useCallback(() => {
@@ -62,17 +78,19 @@ const App = () => {
   }, []);
 
   return (
-    <NextUIProvider>
-      <div className="font-montserrat container mx-auto p-10">
+    <div className="w-screen h-screen bg-fondo">
+    
+    <NextUIProvider >
+      <div className=" font-montserrat container mx-auto p-10">
         <Stepper currentStep={currentStep} />
         {CurrentForm}
         <ButtonGroup className="mt-5">
-          <Button color="default" onPress={handleBack} isDisabled={isFirstStep}>
+          <Button className="bg-botonNegativo" onPress={handleBack} isDisabled={isFirstStep}>
             {"Atrás"}
           </Button>
           <Button
-            isDisabled={isLastStep} 
-            color="primary"
+            isDisabled={isLastStep}
+            className="bg-botonPositivo" 
             onPress={isLastStep ? undefined : handleForward}
           >
             Siguiente
@@ -81,6 +99,7 @@ const App = () => {
       
       </div>
     </NextUIProvider>
+    </div>
     
   );
 };

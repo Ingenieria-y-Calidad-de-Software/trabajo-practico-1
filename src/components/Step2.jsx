@@ -6,8 +6,8 @@ import ComboCiudades from "./ComboCiudades";
 const Step2 = ({validar}) => {
 
   const [ciudadEntrega, setCiudadEntrega] = React.useState("");
-  const [calleErrorState, setCalleErrorState] = React.useState('invalid');
-  const [alturaErrorState, setAlturaErrorState] = React.useState('invalid');
+  const [calleErrorState, setCalleErrorState] = React.useState('');
+  const [alturaErrorState, setAlturaErrorState] = React.useState('');
   const [calleErrorMessage, setCalleErrorMessage] = React.useState('');
   const [alturaErrorMessage, setAlturaErrorMessage] = React.useState('');
 
@@ -40,11 +40,11 @@ const Step2 = ({validar}) => {
 
   function validarCampos()
   {
-    if(calleErrorState === "invalid" || alturaErrorState === "invalid" || ciudadEntrega === "") {
-      return false;
+    if(calleErrorState === "valid" && alturaErrorState === "valid" && ciudadEntrega !== "") {
+      return true;
     }
     else{
-      return true;
+      return false;
     }
   }
   const paso = validarCampos();
@@ -53,15 +53,15 @@ const Step2 = ({validar}) => {
   
   return (
     <div className="mt-10">
-      <h1 className="text-2xl font-bold mb-2">Direccion del Comerico</h1>
+      <h1 className="text-2xl font-bold mb-2">Por dónde lo retiramos?</h1>
       <p>Indica por donde debe pasar el cadete a retirar tus productos:</p>
         <div className="flex w-full flex-wrap md:flex-nowrap gap-4 ">
+          <ComboCiudades onSelectCategory ={(valorCiudad) => (setCiudadEntrega(valorCiudad))}/>
           <Input type="text" name="calle" onChange={calleValidation} errorMessage={calleErrorMessage} validationState={calleErrorState} label="Calle*"></Input>
-          <Input type="text" name="alutra" onChange={alturaValidation} errorMessage={alturaErrorMessage} validationState={alturaErrorState} label="Altura*" ></Input>
         </div>
 
         <div className="flex w-full flex-wrap md:flex-nowrap gap-4 mt-5 ">
-          <ComboCiudades onSelectCategory ={(valorCiudad) => (setCiudadEntrega(valorCiudad))}/>
+          <Input type="text" name="altura" onChange={alturaValidation} errorMessage={alturaErrorMessage} validationState={alturaErrorState} label="Altura*" ></Input>
           <Input type="text" name="referencia" label="Referencia" ></Input>
         </div>
         

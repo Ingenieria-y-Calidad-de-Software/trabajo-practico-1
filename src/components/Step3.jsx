@@ -15,7 +15,7 @@ const Step3 = ({ validarStep3 }) => {
 
   function alturaValidation(e) {
     const altura = e.target.value;
-    if (altura <= 0 ) {
+    if (altura <= 0 || isNaN(altura)) {
       setAlturaErrorState("invalid");
       setAlturaErrorMessage("Ingresa una altura valida");
     } else {

@@ -22,7 +22,7 @@ export default function ComboCiudades( {onSelectCategory} ) {
       <DropdownTrigger>
         <Button
           variant="solid"
-          className="capitalize relative w-full inline-flex tap-highlight-transparent shadow-sm px-3 
+          className=" font-montserrat capitalize relative w-full inline-flex tap-highlight-transparent shadow-sm px-3 
           bg-default-100 data-[hover=true]:bg-default-200 group-data-[focus=true]:bg-default-100 
           min-h-unit-10 rounded-medium flex-col items-start justify-center gap-0 transition-background 
           motion-reduce:transition-none !duration-150 outline-none group-data-[focus-visible=true]:z-10 
@@ -34,6 +34,7 @@ export default function ComboCiudades( {onSelectCategory} ) {
         </Button>
       </DropdownTrigger>
       <DropdownMenu
+        className="font-montserrat"
         aria-label="Single selection example"
         variant="solid"
         selectionMode="single"
