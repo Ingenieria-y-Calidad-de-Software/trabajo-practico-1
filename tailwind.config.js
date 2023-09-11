@@ -11,6 +11,13 @@ module.exports = {
     fontFamily:{
       'montserrat': ['montserrat']
     },
+    colors: {
+      'fondo': '#EAEBED',
+      'botonPositivo': '#01A7C2',
+      'botonNegativo': '#A3BAC3',
+      'azulTexto': '#006989'
+     },
+  
     extend: {},
   },
   darkMode: "class",

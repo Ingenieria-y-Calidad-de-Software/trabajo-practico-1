@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CustomRadio from "./CustomRatio";
 import { RadioGroup, Input } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
@@ -31,6 +31,9 @@ const Step4 = () => {
   const [expiration, setExpiration] = React.useState("");
   const [codeNumber, setCodeNumber] = React.useState("");
   const [cash, setCash] = React.useState("");
+  const [valorEnvio, setValorEnvio] = React.useState();
+
+  
 
   function handlePayMethodChange(e) {
     const methodSelected = e.target.value;
@@ -42,8 +45,10 @@ const Step4 = () => {
     const max = 5000
     const distance = Math.random() * ((max-min) + min);
     const price = (distance / 100) * 50;
-    return ("$" + Math.round(price));
+    return (Math.round(price));
   }
+
+  useEffect(() => setValorEnvio(calculatePrice()), []);
 
   function validateForm() {
     if (payMethod === "card") {
@@ -88,10 +93,18 @@ const Step4 = () => {
     
     if (payMethod === "cash") {
       const cash1 = cash.toString();
-      if (cash1.length === 0) {
+      if (cash1.length === 0 ) {
         swal({
           title: "Error!",
           text: "Por favor, indique el monto a pagar.",
+          icon: "error",
+          button: "Aceptar"
+        });
+        return
+      } else if (+cash < valorEnvio){
+        swal({
+          title: "Error!",
+          text: "Por favor, indique un monto válido.",
           icon: "error",
           button: "Aceptar"
         });
@@ -120,7 +133,7 @@ const Step4 = () => {
           <TableBody>
             <TableRow key="1">
               <TableCell>Envío: Producto de "Lo que sea"</TableCell>
-              <TableCell>{calculatePrice()}</TableCell>
+              <TableCell>${valorEnvio}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
