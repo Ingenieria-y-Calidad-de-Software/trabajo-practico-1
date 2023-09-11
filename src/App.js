@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { NextUIProvider, Button, ButtonGroup } from "@nextui-org/react";
 
 import Stepper from "./components/Stepper";
@@ -12,7 +12,10 @@ import Step5 from "./components/Step5";
 const App = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const isFirstStep = currentStep === 1;
-  const isLastStep = currentStep === 4;
+  const [isValidStep3, setIsValidStep3] = useState(false);
+
+
+  const isLastStep = currentStep === 4 || !isValidStep3;
 
   const CurrentForm = useMemo(() => {
     switch (currentStep) {
@@ -21,14 +24,27 @@ const App = () => {
       case 2:
         return <Step2 />;
       case 3:
-        return <Step3 />;
+        return <Step3 validarStep3={(resValidacion) => setIsValidStep3(resValidacion)}/>;
       case 4:
+
         return <Step4 />;
 
       default:
         break;
     }
   }, [currentStep]);
+
+  useEffect(() => {
+    if (currentStep !== 3 && !isValidStep3) {
+      setIsValidStep3(true)
+      
+    }
+    
+    
+    return () => {
+    }
+  }, [currentStep, isValidStep3])
+  
 
   const handleBack = useCallback(() => {
     setCurrentStep((currentStep) => {
