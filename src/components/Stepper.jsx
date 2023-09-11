@@ -11,11 +11,11 @@ const steps = [
   },
   {
     id: "3",
-    title: "Entrega",
+    title: "Direccion de Entrega",
   },
   {
     id: "4",
-    title: "Forma de pago",
+    title: "Pago",
   },
 ];
 
@@ -24,7 +24,7 @@ const Stepper = ({ currentStep }) => {
     <ol class="flex flex-col gap-5 justify-center w-full space-y-0 sm:items-center sm:flex-row sm:space-x-8 sm:space-y-0">
       {steps.map((step, index) => {
         const isCurrentStep = index + 1 === currentStep;
-        const liStyles = isCurrentStep ? 'text-blue-600 dark:text-blue-500' : 'text-gray-500 dark:text-gray-400';
+        const liStyles = isCurrentStep ? 'justify-center  text-azulTexto text-bold' : 'hidden md:flex  text-gray-500 dark:text-gray-400';
         const spanStyles = isCurrentStep ? 'border-blue-600' : 'border-gray-500';
 
         return (
