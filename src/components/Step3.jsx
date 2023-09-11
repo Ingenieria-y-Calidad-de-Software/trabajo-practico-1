@@ -70,7 +70,7 @@ const Step3 = ({ validarStep3 }) => {
   return (
     <>
       <div className="mt-10">
-        <h1 className="text-2xl font-bold mb-2">Direccion de Entrega</h1>
+        <h1 className="text-2xl font-bold mb-2">Dónde lo enviamos?</h1>
         <p>Indica donde queres recibir tu productos:</p>
         <div className="flex w-full flex-wrap md:flex-nowrap gap-4 ">
           <ComboCiudades
@@ -97,7 +97,7 @@ const Step3 = ({ validarStep3 }) => {
           ></Input>
           <Input type="text" name="referencia" label="Referencia"></Input>
         </div>
-        <h1 className="text-2xl font-bold mb-2 mt-5">Momento de Entrega</h1>
+        <h1 className="text-2xl font-bold mb-2 mt-5">Cuando queres recibirlo?</h1>
         <RadioGroup
           label="Indica cuando queres recibir los productos"
           defaultValue="fast"

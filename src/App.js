@@ -60,7 +60,7 @@ const App = () => {
 
   return (
     <NextUIProvider>
-      <div class="container mx-auto p-10">
+      <div className="font-montserrat container mx-auto p-10">
         <Stepper currentStep={currentStep} />
         {CurrentForm}
         <ButtonGroup className="mt-5">
