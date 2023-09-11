@@ -1,31 +1,13 @@
 import React, { useState, useRef } from "react";
 import { Button } from "@nextui-org/react";
-import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-} from "@nextui-org/react";
 import FileLoaderInput from "./FileLoaderInput";
-
-const columns = [
-  {
-    key: "descripcion",
-    label: "DESCRIPCIÓN",
-  },
-  {
-    key: "url",
-    label: "IMÁGENES",
-  },
-];
 
 const Step1 = (props) => {
   const [productos, setProductos] = useState([]);
   const [archivosSeleccionados, setArchivosSeleccionados] = useState([]);
   const [descripcionErrorState, setDescripcionErrorState] = useState("valid");
   const [descripcionErrorMessage, setDescripcionErrorMessage] = useState("");
+  const [pedidoAgregado, setPedidoAgregado] = useState(false); // Estado para rastrear si se agregó el producto al carrito
 
   const productForm = useRef(null);
 
@@ -42,25 +24,26 @@ const Step1 = (props) => {
       setDescripcionErrorMessage("Ingresa una descripción válida");
       return;
     }
-  
+
     const archivosSeleccionadosArray = Array.from(archivosSeleccionados);
-  
+
     const urls =
       archivosSeleccionadosArray.length > 0
         ? archivosSeleccionadosArray.map((archivo) => URL.createObjectURL(archivo))
         : [];
-  
+
     const producto = {
       key: productos.length + 1,
       descripcion: productForm.current.descripcion.value,
       urls: urls,
     };
-  
+
     setProductos([...productos, producto]);
     productForm.current.reset();
     limpiarErrorDescripcion();
     props.onAgregarAlCarrito();
     setArchivosSeleccionados([]);
+    setPedidoAgregado(true); // Marcar el producto como agregado al carrito
   };
 
   // Manejar el envío del formulario
@@ -87,6 +70,7 @@ const Step1 = (props) => {
     productForm.current.reset();
     limpiarErrorDescripcion();
     props.onAgregarAlCarrito();
+    setPedidoAgregado(true); // Marcar el producto como agregado al carrito
   };
 
   return (
@@ -110,40 +94,49 @@ const Step1 = (props) => {
           <p>Si deseas, puedes seleccionar fotos para mostrarle al cadete lo que debe buscar:</p>
           <FileLoaderInput onFilesSelected={setArchivosSeleccionados} />
           <Button
-            color="success"
+            color={pedidoAgregado ? "white" : "success"}
             type="button"
             onClick={agregarProducto}
-            className="w-full md:w-fit self-end font-semibold mt-5"
-            style={{ color: "#fff" }}
+            className={`w-full md:w-fit self-end font-semibold mt-5 ${
+              pedidoAgregado
+                ? "border border-green-500 text-green-500"
+                : "text-white bg-success"
+            }`}
+            disabled={pedidoAgregado}
           >
-            Agregar al Carrito
+            {pedidoAgregado ? "Pedido Agregado" : "Agregar Pedido"}
           </Button>
         </div>
       </form>
 
       <h1 className="text-2xl font-bold mb-2">Tu Pedido</h1>
-      <Table aria-label="Ejemplo de tabla con contenido dinámico">
-        <TableHeader columns={columns}>
-          {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
-        </TableHeader>
-        <TableBody items={productos}>
-          {(item) => (
-            <TableRow key={item.key}>
-              <TableCell>{item.descripcion}</TableCell>
-              <TableCell>
-                {item.urls.map((url, index) => (
-                  <img
-                    key={index}
-                    src={url}
-                    alt={`Imagen ${index + 1}`}
-                    style={{ maxWidth: "100px", maxHeight: "100px" }}
-                  />
-                ))}
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+      <div className="flex flex-wrap">
+        {productos.map((item) => (
+          <div key={item.key} className="mb-4" style={{ display: 'flex', alignItems: 'center' }}>
+            <div className="border p-4">
+              <p className="font-semibold">Descripción:</p>
+              <p>{item.descripcion}</p>
+            </div>
+            <div className="border p-4 ml-4">
+              <p className="font-semibold">Imágenes:</p>
+              {item.urls.length > 0 ? (
+                <div className="flex">
+                  {item.urls.map((url, index) => (
+                    <img
+                      key={index}
+                      src={url}
+                      alt={`Imagen ${index + 1}`}
+                      style={{ maxWidth: "100px", maxHeight: "100px", marginRight: "10px" }}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p>No hay imágenes cargadas</p>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
