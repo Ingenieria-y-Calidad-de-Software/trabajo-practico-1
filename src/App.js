@@ -11,15 +11,18 @@ import Step5 from "./components/Step5";
 
 const App = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [st2, setCurrentSt2] = useState(false);
   const isFirstStep = currentStep === 1;
-  const isLastStep = currentStep === 4;
+  const isLastStep = currentStep === 4 || st2;
+  
 
   const CurrentForm = useMemo(() => {
     switch (currentStep) {
       case 1:
+        setCurrentSt2(false)
         return <Step1 />;
       case 2:
-        return <Step2 />;
+        return < Step2 validar = {(camp) =>  setCurrentSt2(!camp)} />;
       case 3:
         return <Step3 />;
       case 4:
@@ -52,15 +55,17 @@ const App = () => {
             {"Atrás"}
           </Button>
           <Button
-            isDisabled={isLastStep}
+            isDisabled={isLastStep} 
             color="primary"
             onPress={isLastStep ? undefined : handleForward}
           >
             Siguiente
           </Button>
         </ButtonGroup>
+      
       </div>
     </NextUIProvider>
+    
   );
 };
 
