@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { NextUIProvider, Button, ButtonGroup } from "@nextui-org/react";
 
 import Stepper from "./components/Stepper";
@@ -13,7 +13,10 @@ const App = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [st2, setCurrentSt2] = useState(false);
   const isFirstStep = currentStep === 1;
-  const isLastStep = currentStep === 4 || st2;
+  const [isValidStep3, setIsValidStep3] = useState(false);
+
+
+  const isLastStep = currentStep === 4 || !isValidStep3 || !st2;
   
 
   const CurrentForm = useMemo(() => {
@@ -22,16 +25,29 @@ const App = () => {
         setCurrentSt2(false)
         return <Step1 />;
       case 2:
-        return < Step2 validar = {(camp) =>  setCurrentSt2(!camp)} />;
+        return < Step2 validar = {(camp) =>  setCurrentSt2(camp)} />;
       case 3:
-        return <Step3 />;
+        return <Step3 validarStep3={(resValidacion) => setIsValidStep3(resValidacion)}/>;
       case 4:
+
         return <Step4 />;
 
       default:
         break;
     }
   }, [currentStep]);
+
+  useEffect(() => {
+    if (currentStep !== 3 && !isValidStep3) {
+      setIsValidStep3(true)
+      
+    }
+    
+    
+    return () => {
+    }
+  }, [currentStep, isValidStep3])
+  
 
   const handleBack = useCallback(() => {
     setCurrentStep((currentStep) => {
@@ -47,7 +63,7 @@ const App = () => {
 
   return (
     <NextUIProvider>
-      <div class="container mx-auto p-10">
+      <div className="font-montserrat container mx-auto p-10">
         <Stepper currentStep={currentStep} />
         {CurrentForm}
         <ButtonGroup className="mt-5">

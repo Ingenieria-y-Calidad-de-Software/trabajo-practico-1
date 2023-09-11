@@ -15,7 +15,7 @@ const steps = [
   },
   {
     id: "4",
-    title: "Forma de pago",
+    title: "Pago",
   },
 ];
 

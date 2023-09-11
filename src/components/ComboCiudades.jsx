@@ -18,7 +18,7 @@ export default function ComboCiudades( {onSelectCategory} ) {
   }
 
   return (
-    <Dropdown>
+    <Dropdown className="group flex flex-col w-full">
       <DropdownTrigger>
         <Button
           variant="solid"
@@ -40,6 +40,7 @@ export default function ComboCiudades( {onSelectCategory} ) {
         selectedKeys={selectedKeys}
         // eslint-disable-next-line no-restricted-globals
         onSelectionChange={(key)=> selectCategory(key)}
+        
       >
         
         <DropdownItem key="Córdoba">Córdoba</DropdownItem>
