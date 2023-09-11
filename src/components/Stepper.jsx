@@ -3,7 +3,7 @@ import React from "react";
 const steps = [
   {
     id: "1",
-    title: "Descripcion de productos",
+    title: "Realizar pedido",
   },
   {
     id: "2",

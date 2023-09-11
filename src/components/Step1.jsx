@@ -1,189 +1,109 @@
-import React from "react";
-import { Input, Button } from "@nextui-org/react";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from "@nextui-org/react";
+import React, { useState, useRef } from "react";
+import { Button } from "@nextui-org/react";
+import FileLoaderInput from "./FileLoaderInput";
 
-const labelFileStyles = {
-  backgroundColor: '#007bff',
-  color: '#fff',
-  padding: '10px 20px',
-  cursor: 'pointer',
-  marginTop: '10px',
-  borderRadius: '10px',
-};
-const rows = [
-  {
-    key: "1",
-    name: "Tony Reichert",
-    role: "CEO",
-    status: "Active",
-  },
-  {
-    key: "2",
-    name: "Zoey Lang",
-    role: "Technical Lead",
-    status: "Paused",
-  },
-  {
-    key: "3",
-    name: "Jane Fisher",
-    role: "Senior Developer",
-    status: "Active",
-  },
-  {
-    key: "4",
-    name: "William Howard",
-    role: "Community Manager",
-    status: "Vacation",
-  },
-];
+const Step1 = (props) => {
+  const [productos, setProductos] = useState([]);
+  const [archivosSeleccionados, setArchivosSeleccionados] = useState([]);
+  const [descripcionErrorState, setDescripcionErrorState] = useState("valid");
+  const [descripcionErrorMessage, setDescripcionErrorMessage] = useState("");
+  const [pedidoAgregado, setPedidoAgregado] = useState(false);
+  const productForm = useRef(null);
 
-const columns = [
-  {
-    key: "nombre",
-    label: "NOMBRE",
-  },
-  {
-    key: "cantidad",
-    label: "CANTIDAD",
-  },
-  {
-    key: "url",
-    label: "IMAGENES",
-  },
-  {
-    key: "obs",
-    label: "OBSERVACION",
-  },
-  {
-    key: "actions",
-    label: "ACCIONES",
-  }
-];
-const Step1 = () => {
-
-  const [productos, setProductos] = React.useState([]);
-  const [archivosSeleccionados, setArchivosSeleccionados] = React.useState(null);
-  // Validaciones de campos obligatorios
-  const [nombreErrorState, setNombreErrorState] = React.useState('valid');
-  const [cantidadErrorState, setCantidadErrorState] = React.useState('valid');
-  const [nameErrorMessage, setNameErrorMessage] = React.useState('');
-  const [cantidadErrorMessage, setCantidadErrorMessage] = React.useState('');
-
-  const fileInputRef = React.useRef(null);
-  const productForm = React.useRef(null);
-
-  function addProduct() {
-
-
-  }
-
-  const verificarTamanio = (archivos) => {
-    const archivosArray = Array.from(archivos);
-    archivosArray.forEach((archivo) => {
-      if (archivo.size > 5 * 1024 * 1024) {
-        alert('El archivo ' + archivo.name + ' es muy grande, el tamaño maximo es de 5MB');
-        setArchivosSeleccionados(null);
-        fileInputRef.current.value = null; // Restablecer el valor del input file
-        return;
-      }
-    })
-    setArchivosSeleccionados(archivos);
-
-  }
-
-  const handleFileChange = (e) => {
-    const archivos = e.target.files;
-    verificarTamanio(archivos);
-
+  const limpiarErrorDescripcion = () => {
+    setDescripcionErrorState("valid");
+    setDescripcionErrorMessage("");
   };
 
-  const cancelFileUploaded = () => {
-    setArchivosSeleccionados(null);
-    fileInputRef.current.value = null; // Restablecer el valor del input file
-  };
-
-  function validForm() {
-    if (!productForm.current.nombre.value) {
-      setNombreErrorState('invalid');
-      setNameErrorMessage('Ingresa un nombre valido');
-    }
-    else {
-      setNombreErrorState('valid');
-      setNameErrorMessage('');
-    }
-
-    if (productForm.current.cantidad.value <= 0 || isNaN(+productForm.current.cantidad.value)) {
-      setCantidadErrorState('invalid');
-      setCantidadErrorMessage('Ingresa una cantidad valida');
-
-    } else {
-      setCantidadErrorState('valid');
-      setCantidadErrorMessage('');
-    }
-
-    if (!productForm.current.nombre.value || productForm.current.cantidad.value <= 0 || isNaN(+productForm.current.cantidad.value)) {
-      return false;
-    }
-    return true;
-
-  }
-
-  const handleSubmit = (e) => {
+  
+  const agregarProducto = (e) => {
     e.preventDefault();
-    if (!validForm()) return;
-
+    if (!productForm.current.descripcion.value) {
+      setDescripcionErrorState("invalid");
+      setDescripcionErrorMessage("Ingresa una descripción válida");
+      return;
+    }
+  
+    const archivosSeleccionadosArray = Array.from(archivosSeleccionados);
+  
     const producto = {
       key: productos.length + 1,
-      nombre: productForm.current.nombre.value,
-      cantidad: productForm.current.cantidad.value,
-      url: [...archivosSeleccionados].map((archivo) => archivo.name).join(', ') || 'No se selecciono ningun archivo',
-      obs: productForm.current.observacion.value,
+      descripcion: productForm.current.descripcion.value,
+      urls: archivosSeleccionadosArray.map((archivo) => URL.createObjectURL(archivo)), // Obtener las urls de los archivos
     };
+  
     setProductos([...productos, producto]);
     productForm.current.reset();
-    cancelFileUploaded();
-
-
-  }
-
-
+    limpiarErrorDescripcion();
+    props.onAgregarAlCarrito();
+    setPedidoAgregado(true);
+    setArchivosSeleccionados([]); // Limpiar los archivos seleccionados después de agregarlos
+  };
+  
   return (
     <div className="mt-10">
-      <h1 className="text-2xl font-bold mb-2">Agrega Productos al Carrito</h1>
-      <form onSubmit={handleSubmit} ref={productForm}>
-        <p>Llena los siguientes campos para cada producto:</p>
+      <h1 className="text-2xl font-bold mb-2">Agregar qué debe buscar el cadete</h1>
+      <form onSubmit={agregarProducto} ref={productForm}>
+        <p>Llena el campo descripción indicando los productos a buscar:</p>
         <div className="flex gap-4 flex-wrap md:flex-nowrap">
-          <Input type="text" name="nombre" label="Nombre del producto*" errorMessage={nameErrorMessage} validationState={nombreErrorState} className="" />
-          <Input type="number" name="cantidad" label="Cantidad*" errorMessage={cantidadErrorMessage} validationState={cantidadErrorState} className="" />
-          <Input type="text" name="observacion" label="Observacion" className="" />
+          <textarea
+            name="descripcion"
+            placeholder="Descripción de los productos*"
+            rows="4"
+            style={{ width: "100%" }}
+            className={`border border-gray-300 p-2 rounded-md ${descripcionErrorState}`}
+          ></textarea>
+          {descripcionErrorMessage && (
+            <div className="text-red-500">{descripcionErrorMessage}</div>
+          )}
         </div>
         <div className="flex flex-col mt-5">
-
-          <p>Si deseas podes seleccionar fotos para mostrarle al cadete lo que debe buscar:</p>
-          <label style={labelFileStyles} htmlFor="archivoInput">{(archivosSeleccionados && [...archivosSeleccionados].map((archivo) => archivo.name).join(', ')) || "Selecciona una o mas fotos (.png, .jpeg)"}</label><br />
-          <input multiple type="file" id="archivoInput" name="url" ref={fileInputRef} onChange={handleFileChange} style={{ display: 'none' }} accept="image/png, image/jpeg" />
-          {archivosSeleccionados && (<button onClick={cancelFileUploaded}>Cancelar Selección</button>)}
-          <Button color="success" type="submit" onClick={addProduct} className="w-full md:w-fit self-end font-semibold mt-5" style={{ color: '#fff' }}>Agregar al Carrito</Button>
+          <p>Si deseas, puedes seleccionar fotos para mostrarle al cadete lo que debe buscar:</p>
+          <FileLoaderInput onFilesSelected={setArchivosSeleccionados} />
+          <Button
+            color={pedidoAgregado ? "white" : "success"}
+            type="button"
+            onClick={agregarProducto}
+            className={`w-full md:w-fit self-end font-semibold mt-5 ${
+              pedidoAgregado
+                ? "border border-green-500 text-green-500"
+                : "text-white bg-success"
+            }`}
+            disabled={pedidoAgregado}
+          >
+            {pedidoAgregado ? "Pedido Agregado" : "Agregar Pedido"}
+          </Button>
         </div>
       </form>
 
-      {/* CARRITO */}
-
-      <h2 className="text-lg font-bold mb-2">Tu Carrito</h2>
-      <Table aria-label="Example table with dynamic content">
-        <TableHeader columns={columns}>
-          {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
-        </TableHeader>
-        <TableBody items={productos}>
-          {(item) => (
-            <TableRow key={item.key}>
-              {(columnKey) => <TableCell>{getKeyValue(item, columnKey)} </TableCell>}
-
-            </TableRow>
-          )}
-
-        </TableBody>
-      </Table>
+      <h1 className="text-2xl font-bold mb-2">Tu Pedido</h1>
+      <div className="flex flex-wrap">
+        {productos.map((item) => (
+          <div key={item.key} className="mb-4" style={{ display: 'flex', alignItems: 'center' }}>
+            <div className="border p-4">
+              <p className="font-semibold">Descripción:</p>
+              <p>{item.descripcion}</p>
+            </div>
+            <div className="border p-4 ml-4">
+              <p className="font-semibold">Imágenes:</p>
+              {item.urls.length > 0 ? (
+                <div className="flex">
+                  {item.urls.map((url, index) => (
+                    <img
+                      key={index}
+                      src={url}
+                      alt={`Imagen ${index + 1}`}
+                      style={{ maxWidth: "100px", maxHeight: "100px", marginRight: "10px" }}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p>No hay imágenes cargadas</p>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

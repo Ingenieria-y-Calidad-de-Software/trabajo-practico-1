@@ -7,7 +7,6 @@ import Step1 from "./components/Step1";
 import Step2 from "./components/Step2";
 import Step3 from "./components/Step3";
 import Step4 from "./components/Step4";
-import Step5 from "./components/Step5";
 
 const App = () => {
   
@@ -24,7 +23,7 @@ const App = () => {
   const CurrentForm = useMemo(() => {
     switch (currentStep) {
       case 1:
-        return <Step1 />;
+        return <Step1 onAgregarAlCarrito={() => setProductosAgregados(true)} />;
       case 2:
         return < Step2 validar = {(camp) =>  setCurrentSt2(camp)} />;
       case 3:
@@ -76,6 +75,8 @@ const App = () => {
       return currentStep + 1;
     });
   }, []);
+
+  const [productosAgregados, setProductosAgregados] = useState(false);
 
   return (
     <div className="w-screen h-screen bg-fondo">
