@@ -37,6 +37,14 @@ const Step4 = () => {
     setPayMethod(methodSelected);
   }
 
+  function calculatePrice() {
+    const min = 1000
+    const max = 5000
+    const distance = Math.random() * ((max-min) + min);
+    const price = (distance / 100) * 50;
+    return ("$" + Math.round(price));
+  }
+
   function validateForm() {
     if (payMethod === "card") {
       const number = cardNumber.toString();
@@ -112,14 +120,14 @@ const Step4 = () => {
           <TableBody>
             <TableRow key="1">
               <TableCell>Envío: Producto de "Lo que sea"</TableCell>
-              <TableCell>$20</TableCell>
+              <TableCell>{calculatePrice()}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </div>
 
       <div className="mt-10">
-        <h1 className="text-2xl font-bold mb-2">Forma de Pago</h1>
+        <h1 className="text-2xl font-bold mb-2">Cómo vas a abonar?</h1>
         <RadioGroup
           onChange={handlePayMethodChange}
           defaultValue="cash"
