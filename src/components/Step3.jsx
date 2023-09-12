@@ -97,7 +97,9 @@ const Step3 = ({ validarStep3 }) => {
           ></Input>
           <Input type="text" name="referencia" label="Referencia"></Input>
         </div>
-        <h1 className="text-2xl font-bold mb-2 mt-5">Cuando queres recibirlo?</h1>
+        <h1 className="text-2xl font-bold mb-2 mt-5">
+          Cuando queres recibirlo?
+        </h1>
         <RadioGroup
           label="Indica cuando queres recibir los productos"
           defaultValue="fast"
@@ -145,7 +147,6 @@ const Step3 = ({ validarStep3 }) => {
                   <CardBody></CardBody>
                 </Card>
               </div>
-              
             ) : (
               <></>
             )}

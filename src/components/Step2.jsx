@@ -19,12 +19,9 @@ const Step2 = ({validar}) => {
 
     } else {
       setAlturaErrorState('valid');
-      setAlturaErrorMessage('');
-      
+      setAlturaErrorMessage(''); 
     }
-    
   }
-
 
   function calleValidation(e){
     const calle = e.target.value;
@@ -47,9 +44,9 @@ const Step2 = ({validar}) => {
       return false;
     }
   }
+  
   const paso = validarCampos();
   validar(validarCampos());
-  //console.log(props.campos[0]);
   
   return (
     <div className="mt-10">
@@ -64,7 +61,6 @@ const Step2 = ({validar}) => {
           <Input type="text" name="altura" onChange={alturaValidation} errorMessage={alturaErrorMessage} validationState={alturaErrorState} label="Altura*" ></Input>
           <Input type="text" name="referencia" label="Referencia" ></Input>
         </div>
-        
     </div>
   )
 };

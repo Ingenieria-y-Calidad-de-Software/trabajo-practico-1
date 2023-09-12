@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { Button, Input, Textarea } from "@nextui-org/react";
 import FileLoaderInput from "./FileLoaderInput";
 
-const Step1 = ( {validarStep1} ) => {
+const Step1 = ({ validarStep1 }) => {
   const [productos, setProductos] = useState([]);
   const [archivosSeleccionados, setArchivosSeleccionados] = useState([]);
   const [descripcionErrorState, setDescripcionErrorState] = useState("");
@@ -15,59 +15,29 @@ const Step1 = ( {validarStep1} ) => {
     setDescripcionErrorMessage("");
   };
 
-  function descripcionValidation(e){
+  function descripcionValidation(e) {
     const descripcion = e.target.value;
     if (!descripcion) {
-      setDescripcionErrorState('invalid');
-      setDescripcionErrorMessage('Ingresa un nombre valido');
-    }
-    else {
-      setDescripcionErrorState('valid');
-      setDescripcionErrorMessage('');
+      setDescripcionErrorState("invalid");
+      setDescripcionErrorMessage("Ingresa un nombre valido");
+    } else {
+      setDescripcionErrorState("valid");
+      setDescripcionErrorMessage("");
     }
   }
 
   const validar = () => {
-    if (descripcionErrorState === 'valid') {
+    if (descripcionErrorState === "valid") {
       return true;
     }
     return false;
-  }
-  validarStep1 ( validar );
-
-  // const agregarProducto = (e) => {
-  //   e.preventDefault();
-  //   if (!productForm.current.descripcion.value) {
-  //     setDescripcionErrorState("invalid");
-  //     setDescripcionErrorMessage("Ingresa una descripción válida");
-  //     return;
-  //   }
-
-
-  //   const archivosSeleccionadosArray = Array.from(archivosSeleccionados);
-
-  //   const producto = {
-  //     key: productos.length + 1,
-  //     descripcion: productForm.current.descripcion.value,
-  //     urls: archivosSeleccionadosArray.map((archivo) =>
-  //       URL.createObjectURL(archivo)
-  //     ), // Obtener las urls de los archivos
-  //   };
-
-  //   setProductos([...productos, producto]);
-    
-  //   limpiarErrorDescripcion();
-  //   props.onAgregarAlCarrito();
-  //   setPedidoAgregado(true);
-  //   setArchivosSeleccionados([]); // Limpiar los archivos seleccionados después de agregarlos
-  // };
+  };
+  validarStep1(validar);
 
   return (
     <div className="mt-10">
-      <h1 className="text-2xl font-bold mb-2">
-        Qué debe buscar el cadete ?
-      </h1>
-      <form  ref={productForm}>
+      <h1 className="text-2xl font-bold mb-2">Qué debe buscar el cadete ?</h1>
+      <form ref={productForm}>
         <p>Llena el campo descripción indicando los productos a buscar:</p>
         <div className="flex gap-4 flex-wrap md:flex-nowrap">
           <Textarea
@@ -77,7 +47,7 @@ const Step1 = ( {validarStep1} ) => {
             errorMessage={descripcionErrorMessage}
             validationState={descripcionErrorState}
             label="Descripcion de productos*"
-            size='lg'
+            size="lg"
           ></Textarea>
         </div>
         <div className="flex flex-col mt-5">
@@ -86,10 +56,8 @@ const Step1 = ( {validarStep1} ) => {
             debe buscar:
           </p>
           <FileLoaderInput onFilesSelected={setArchivosSeleccionados} />
-         
         </div>
       </form>
-
     </div>
   );
 };

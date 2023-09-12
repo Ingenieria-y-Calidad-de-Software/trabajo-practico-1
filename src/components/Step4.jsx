@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import CustomRadio from "./CustomRatio";
 import { RadioGroup, Input } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
-import swal from 'sweetalert';
+import swal from "sweetalert";
 import {
   Table,
   TableHeader,
@@ -24,7 +24,6 @@ const columns = [
 ];
 
 const Step4 = () => {
- 
   const [payMethod, setPayMethod] = React.useState("cash");
   const [cardNumber, setCardNumber] = React.useState("");
   const [cardName, setCardName] = React.useState("");
@@ -33,19 +32,17 @@ const Step4 = () => {
   const [cash, setCash] = React.useState("");
   const [valorEnvio, setValorEnvio] = React.useState();
 
-  
-
   function handlePayMethodChange(e) {
     const methodSelected = e.target.value;
     setPayMethod(methodSelected);
   }
 
   function calculatePrice() {
-    const min = 1000
-    const max = 5000
-    const distance = Math.random() * ((max-min) + min);
+    const min = 1000;
+    const max = 5000;
+    const distance = Math.random() * (max - min + min);
     const price = (distance / 100) * 50;
-    return (Math.round(price));
+    return Math.round(price);
   }
 
   useEffect(() => setValorEnvio(calculatePrice()), []);
@@ -61,54 +58,54 @@ const Step4 = () => {
           title: "Error!",
           text: "Falló el registro de pago. Nombre de titular no fue ingresado.",
           icon: "error",
-          button: "Aceptar"
+          button: "Aceptar",
         });
-        return
+        return;
       } else if (number.length !== 16 || number.charAt(0) !== "4") {
         swal({
           title: "Error!",
           text: "Falló el registro de pago. Número de tarjeta inválido. Sólo se acepta VISA.",
           icon: "error",
-          button: "Aceptar"
+          button: "Aceptar",
         });
-        return
+        return;
       } else if (numExp.length === 0) {
         swal({
           title: "Error!",
           text: "Falló el registro de pago. Número de vencimiento inválido.",
           icon: "error",
-          button: "Aceptar"
+          button: "Aceptar",
         });
-        return
+        return;
       } else if (code.length !== 3) {
         swal({
           title: "Error!",
           text: "Falló el registro de pago. CVC/CVV inválido.",
           icon: "error",
-          button: "Aceptar"
+          button: "Aceptar",
         });
-        return
+        return;
       }
     }
-    
+
     if (payMethod === "cash") {
       const cash1 = cash.toString();
-      if (cash1.length === 0 ) {
+      if (cash1.length === 0) {
         swal({
           title: "Error!",
           text: "Por favor, indique el monto a pagar.",
           icon: "error",
-          button: "Aceptar"
+          button: "Aceptar",
         });
-        return
-      } else if (+cash < valorEnvio){
+        return;
+      } else if (+cash < valorEnvio) {
         swal({
           title: "Error!",
           text: "Por favor, indique un monto válido.",
           icon: "error",
-          button: "Aceptar"
+          button: "Aceptar",
         });
-        return
+        return;
       }
     }
 
@@ -116,7 +113,7 @@ const Step4 = () => {
       title: "Pedido finalizado!",
       text: "Muchas gracias por tu compra",
       icon: "success",
-      button: "Aceptar"
+      button: "Aceptar",
     });
   }
 
@@ -178,12 +175,12 @@ const Step4 = () => {
                 label="Fecha de Vencimiento*"
                 className="mb-4"
               ></Input>
-              <Input 
+              <Input
                 onChange={(e) => setCodeNumber(e.target.value)}
-                type="number" 
-                label="CVC/CVV*" 
-                className="mb-4">
-              </Input>
+                type="number"
+                label="CVC/CVV*"
+                className="mb-4"
+              ></Input>
             </div>
           </form>
         )}
@@ -191,18 +188,18 @@ const Step4 = () => {
         {payMethod === "cash" && (
           <form action="" className="mt-5">
             <p className="mb-3">Con cuánto vas a abonar?</p>
-            <Input 
+            <Input
               onChange={(e) => setCash(e.target.value)}
-              type="number" 
-              label="Monto*">  
-            </Input>
+              type="number"
+              label="Monto*"
+            ></Input>
           </form>
         )}
         <div className="flex w-full items-center justify-center">
           <Button
             // type="submit"
             onClick={() => {
-              validateForm()
+              validateForm();
             }}
             className="bg-botonPositivo w-full md:w-1/3 font-semibold mt-5"
             style={{ color: "#fff" }}
