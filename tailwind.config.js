@@ -15,7 +15,9 @@ module.exports = {
       'fondo': '#EAEBED',
       'botonPositivo': '#01A7C2',
       'botonNegativo': '#A3BAC3',
-      'azulTexto': '#006989'
+      'azulTexto': '#006989',
+      'fondoNavBar': '#F3F5F6'
+
      },
   
     extend: {},

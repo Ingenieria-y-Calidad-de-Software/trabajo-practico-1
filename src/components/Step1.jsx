@@ -1,11 +1,11 @@
 import React, { useState, useRef } from "react";
-import { Button } from "@nextui-org/react";
+import { Button, Input, Textarea } from "@nextui-org/react";
 import FileLoaderInput from "./FileLoaderInput";
 
-const Step1 = (props) => {
+const Step1 = ( {validarStep1} ) => {
   const [productos, setProductos] = useState([]);
   const [archivosSeleccionados, setArchivosSeleccionados] = useState([]);
-  const [descripcionErrorState, setDescripcionErrorState] = useState("valid");
+  const [descripcionErrorState, setDescripcionErrorState] = useState("");
   const [descripcionErrorMessage, setDescripcionErrorMessage] = useState("");
   const [pedidoAgregado, setPedidoAgregado] = useState(false);
   const productForm = useRef(null);
@@ -15,95 +15,81 @@ const Step1 = (props) => {
     setDescripcionErrorMessage("");
   };
 
-  
-  const agregarProducto = (e) => {
-    e.preventDefault();
-    if (!productForm.current.descripcion.value) {
-      setDescripcionErrorState("invalid");
-      setDescripcionErrorMessage("Ingresa una descripción válida");
-      return;
+  function descripcionValidation(e){
+    const descripcion = e.target.value;
+    if (!descripcion) {
+      setDescripcionErrorState('invalid');
+      setDescripcionErrorMessage('Ingresa un nombre valido');
     }
-  
-    const archivosSeleccionadosArray = Array.from(archivosSeleccionados);
-  
-    const producto = {
-      key: productos.length + 1,
-      descripcion: productForm.current.descripcion.value,
-      urls: archivosSeleccionadosArray.map((archivo) => URL.createObjectURL(archivo)), // Obtener las urls de los archivos
-    };
-  
-    setProductos([...productos, producto]);
-    productForm.current.reset();
-    limpiarErrorDescripcion();
-    props.onAgregarAlCarrito();
-    setPedidoAgregado(true);
-    setArchivosSeleccionados([]); // Limpiar los archivos seleccionados después de agregarlos
-  };
-  
+    else {
+      setDescripcionErrorState('valid');
+      setDescripcionErrorMessage('');
+    }
+  }
+
+  const validar = () => {
+    if (descripcionErrorState === 'valid') {
+      return true;
+    }
+    return false;
+  }
+  validarStep1 ( validar );
+
+  // const agregarProducto = (e) => {
+  //   e.preventDefault();
+  //   if (!productForm.current.descripcion.value) {
+  //     setDescripcionErrorState("invalid");
+  //     setDescripcionErrorMessage("Ingresa una descripción válida");
+  //     return;
+  //   }
+
+
+  //   const archivosSeleccionadosArray = Array.from(archivosSeleccionados);
+
+  //   const producto = {
+  //     key: productos.length + 1,
+  //     descripcion: productForm.current.descripcion.value,
+  //     urls: archivosSeleccionadosArray.map((archivo) =>
+  //       URL.createObjectURL(archivo)
+  //     ), // Obtener las urls de los archivos
+  //   };
+
+  //   setProductos([...productos, producto]);
+    
+  //   limpiarErrorDescripcion();
+  //   props.onAgregarAlCarrito();
+  //   setPedidoAgregado(true);
+  //   setArchivosSeleccionados([]); // Limpiar los archivos seleccionados después de agregarlos
+  // };
+
   return (
     <div className="mt-10">
-      <h1 className="text-2xl font-bold mb-2">Agregar qué debe buscar el cadete</h1>
-      <form onSubmit={agregarProducto} ref={productForm}>
+      <h1 className="text-2xl font-bold mb-2">
+        Qué debe buscar el cadete ?
+      </h1>
+      <form  ref={productForm}>
         <p>Llena el campo descripción indicando los productos a buscar:</p>
         <div className="flex gap-4 flex-wrap md:flex-nowrap">
-          <textarea
+          <Textarea
+            type="text"
             name="descripcion"
-            placeholder="Descripción de los productos*"
-            rows="4"
-            style={{ width: "100%" }}
-            className={`border border-gray-300 p-2 rounded-md ${descripcionErrorState}`}
-          ></textarea>
-          {descripcionErrorMessage && (
-            <div className="text-red-500">{descripcionErrorMessage}</div>
-          )}
+            onChange={descripcionValidation}
+            errorMessage={descripcionErrorMessage}
+            validationState={descripcionErrorState}
+            label="Descripcion de productos*"
+            size='lg'
+          ></Textarea>
         </div>
         <div className="flex flex-col mt-5">
-          <p>Si deseas, puedes seleccionar fotos para mostrarle al cadete lo que debe buscar:</p>
+          <p>
+            Si deseas, puedes seleccionar fotos para mostrarle al cadete lo que
+            debe buscar:
+          </p>
           <FileLoaderInput onFilesSelected={setArchivosSeleccionados} />
-          <Button
-            color={pedidoAgregado ? "white" : "success"}
-            type="button"
-            onClick={agregarProducto}
-            className={`w-full md:w-fit self-end font-semibold mt-5 ${
-              pedidoAgregado
-                ? "border border-green-500 text-green-500"
-                : "text-white bg-success"
-            }`}
-            disabled={pedidoAgregado}
-          >
-            {pedidoAgregado ? "Pedido Agregado" : "Agregar Pedido"}
-          </Button>
+         
         </div>
       </form>
 
-      <h1 className="text-2xl font-bold mb-2">Tu Pedido</h1>
-      <div className="flex flex-wrap">
-        {productos.map((item) => (
-          <div key={item.key} className="mb-4" style={{ display: 'flex', alignItems: 'center' }}>
-            <div className="border p-4">
-              <p className="font-semibold">Descripción:</p>
-              <p>{item.descripcion}</p>
-            </div>
-            <div className="border p-4 ml-4">
-              <p className="font-semibold">Imágenes:</p>
-              {item.urls.length > 0 ? (
-                <div className="flex">
-                  {item.urls.map((url, index) => (
-                    <img
-                      key={index}
-                      src={url}
-                      alt={`Imagen ${index + 1}`}
-                      style={{ maxWidth: "100px", maxHeight: "100px", marginRight: "10px" }}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <p>No hay imágenes cargadas</p>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 };

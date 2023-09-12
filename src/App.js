@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { NextUIProvider, Button, ButtonGroup } from "@nextui-org/react";
-
+import NavBar from "./components/NavBar";
 import Stepper from "./components/Stepper";
 
 import Step1 from "./components/Step1";
@@ -17,13 +17,13 @@ const App = () => {
   const [isValidStep3, setIsValidStep3] = useState(false);
 
 
-  const isLastStep = currentStep === 4 || !isValidStep3 || !st2;
+  const isLastStep = currentStep === 4 || !isValidStep3 || !st2 || !isValidStep1;
   
 
   const CurrentForm = useMemo(() => {
     switch (currentStep) {
       case 1:
-        return <Step1 onAgregarAlCarrito={() => setProductosAgregados(true)} />;
+        return <Step1 validarStep1={(resValidacion) => setIsValidStep1(resValidacion)} />;
       case 2:
         return < Step2 validar = {(camp) =>  setCurrentSt2(camp)} />;
       case 3:
@@ -76,11 +76,11 @@ const App = () => {
     });
   }, []);
 
-  const [productosAgregados, setProductosAgregados] = useState(false);
 
   return (
     <div className="w-screen h-screen bg-fondo">
-    
+        <NavBar/>
+
     <NextUIProvider >
       <div className=" font-montserrat container mx-auto p-10">
         <Stepper currentStep={currentStep} />

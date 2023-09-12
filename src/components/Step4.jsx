@@ -200,12 +200,11 @@ const Step4 = () => {
         )}
         <div className="flex w-full items-center justify-center">
           <Button
-            color="success"
-            type="submit"
+            // type="submit"
             onClick={() => {
               validateForm()
             }}
-            className="w-full md:w-1/3 font-semibold mt-5"
+            className="bg-botonPositivo w-full md:w-1/3 font-semibold mt-5"
             style={{ color: "#fff" }}
           >
             Finalizar Compra

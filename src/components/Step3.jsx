@@ -122,9 +122,6 @@ const Step3 = ({ validarStep3 }) => {
           <div>
             {momentoEntrega.match("custom_date") ? (
               <div className="flex flex-row gap-5 flex-wrap md:flex-nowrap w-full">
-                <Card className=" invisible basis-1/2 inline-flex items-center">
-                  <CardBody></CardBody>
-                </Card>
                 <Card className=" grow basis-1/2 inline-flex items-center">
                   <CardBody>
                     <input
@@ -141,7 +138,14 @@ const Step3 = ({ validarStep3 }) => {
                     />
                   </CardBody>
                 </Card>
+                <Card className=" invisible basis-1/2 inline-flex items-center">
+                  <CardBody></CardBody>
+                </Card>
+                <Card className=" invisible basis-1/2 inline-flex items-center">
+                  <CardBody></CardBody>
+                </Card>
               </div>
+              
             ) : (
               <></>
             )}
